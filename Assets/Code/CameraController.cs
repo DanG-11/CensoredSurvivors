@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,13 +6,12 @@ public class CameraController : MonoBehaviour
 {
     GameObject player;
     Vector3 offset = Vector3.zero;
-
-    // Start is called before the first frame update
     void Start()
     {
-        Application.targetFrameRate = 144;
         player = GameObject.FindGameObjectWithTag("Player");
         offset = transform.position - player.transform.position;
+        Application.targetFrameRate = 60;
+
     }
 
     // Update is called once per frame

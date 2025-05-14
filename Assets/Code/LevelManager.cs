@@ -2,18 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
 
 public class LevelManager : MonoBehaviour
 {
-    public TextMeshProUGUI healthText;
+    public GameObject GameOverCanvas;
     public TextMeshProUGUI scoreText;
-    int playerHealth;
+    public TextMeshProUGUI hpText;
+    int PlayerHealth = 100;
     int points;
     // Start is called before the first frame update
     void Start()
     {
-        playerHealth = 100;
         points = 0;
     }
 
@@ -21,21 +22,42 @@ public class LevelManager : MonoBehaviour
     void Update()
     {
         scoreText.text = "Wynik: " + points.ToString();
-        healthText.text = "HP: " + playerHealth.ToString();
+        hpText.text = "HP: " + PlayerHealth.ToString();
     }
-
     public void AddPoints(int pointsToAdd)
     {
         points += pointsToAdd;
     }
-
     public void ReducePlayerHealth(int amount)
     {
-        playerHealth -= amount;
-        if (playerHealth <= 0)
+        if (PlayerHealth >= 0)
+            PlayerHealth -= amount;
+        else if (PlayerHealth <= 0)
         {
             Time.timeScale = 0;
-            Debug.Log("Game Over");
+            GameOverCanvas.SetActive(true);
         }
+
+
+    }
+    public void ReduceEnemyHealth(int amount)
+    {
+        if (PlayerHealth >= 0)
+            PlayerHealth -= amount;
+        else if (PlayerHealth <= 0)
+        {
+            Time.timeScale = 0;
+            GameOverCanvas.SetActive(true);
+        }
+
+
+    }
+    public void RestartGame()
+    {
+        Time.timeScale = 1;
+        PlayerHealth = 100;
+        points = 0;
+        GameOverCanvas.SetActive(false);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

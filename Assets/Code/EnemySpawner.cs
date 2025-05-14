@@ -6,7 +6,6 @@ public class EnemySpawner : MonoBehaviour
 {
     List<Vector3> spawnPoints;
     public GameObject enemy;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -16,10 +15,16 @@ public class EnemySpawner : MonoBehaviour
         {
             spawnPoints.Add(child.position);
         }
-        InvokeRepeating("Spawn", 0, 0.1f);
+        InvokeRepeating("Spawn", 0, 0.5f);
     }
 
     // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+
     void Spawn()
     {
         int index = Random.Range(0, spawnPoints.Count);

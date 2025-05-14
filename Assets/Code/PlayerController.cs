@@ -9,13 +9,12 @@ public class PlayerController : MonoBehaviour
     public float speed = 5f;
     Rigidbody rb;
     public List<GameObject> enemies;
-    public GameObject gun;
-    public GameObject bulletSpawn;
-    public GameObject swordHandle;
-    public GameObject bulletPrefab;
-    LevelManager lm;
+    public GameObject Gun;
+    public GameObject BulletSpawn;
+    public GameObject bulletPreFab;
+    public GameObject SwordHandle;
 
-    // Start is called before the first frame update
+    LevelManager lm;
     void Start()
     {
         lm = GameObject.Find("LevelManager").GetComponent<LevelManager>();
@@ -24,24 +23,28 @@ public class PlayerController : MonoBehaviour
         InvokeRepeating("Shoot", 0, 2);
     }
 
-    // Update is called once per frame
     void Update()
     {
         controllerInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        //Vector3 movementVector = new Vector3(controllerInput.x, 0, controllerInput.y);
+        //transform.Translate(movementVector * Time.deltaTime * speed);
+
         enemies = GameObject.FindGameObjectsWithTag("Enemy").ToList();
         enemies = enemies.OrderBy(enemy => Vector3.Distance(enemy.transform.position, transform.position)).ToList();
+
         if (enemies.Count > 0 && Vector3.Distance(transform.position, enemies[0].transform.position) < 2f)
         {
-            swordHandle.SetActive(true);
-            swordHandle.transform.Rotate(0, 2f, 0);
+            SwordHandle.SetActive(true);
+            SwordHandle.transform.Rotate(0, 5f, 0);
         }
         else
         {
-            swordHandle.SetActive(false);
+            SwordHandle.SetActive(false);
         }
-    }
 
-    void FixedUpdate()
+
+    }
+    private void FixedUpdate()
     {
         Vector3 movementVector = new Vector3(controllerInput.x, 0, controllerInput.y);
         Vector3 targetPosition = transform.position + movementVector * Time.fixedDeltaTime * speed;
@@ -49,21 +52,22 @@ public class PlayerController : MonoBehaviour
     }
     void Shoot()
     {
+
         if (enemies.Count > 0)
         {
-            gun.transform.LookAt(enemies[0].transform);
-            GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.transform.position, gun.transform.rotation);
-            bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.forward * 1000);
-            Destroy(bullet, 2f);
+            Gun.transform.LookAt(enemies[0].transform);
+            GameObject bullet = Instantiate(bulletPreFab, BulletSpawn.transform.position, Gun.transform.rotation);
+            bullet.GetComponent<Rigidbody>().AddForce(Gun.transform.forward * 1000);
+            //Destroy(enemies[0]);
             Debug.Log("Pif paf!");
+            Destroy(bullet, 2f);
         }
     }
-
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            lm.ReducePlayerHealth(5);
+            lm.ReducePlayerHealth(1);
         }
     }
 }
