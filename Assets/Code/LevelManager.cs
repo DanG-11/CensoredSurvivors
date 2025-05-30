@@ -7,10 +7,11 @@ using UnityEngine.SocialPlatforms.Impl;
 
 public class LevelManager : MonoBehaviour
 {
-    public GameObject GameOverCanvas;
+    public GameObject gameOverPanel;
+    public GameObject pauseMenuPanel;
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI hpText;
-    int PlayerHealth = 100;
+    int playerHealth = 100;
     int points;
     // Start is called before the first frame update
     void Start()
@@ -22,42 +23,50 @@ public class LevelManager : MonoBehaviour
     void Update()
     {
         scoreText.text = "Wynik: " + points.ToString();
-        hpText.text = "HP: " + PlayerHealth.ToString();
+        hpText.text = "HP: " + playerHealth.ToString();
     }
+
     public void AddPoints(int pointsToAdd)
     {
         points += pointsToAdd;
     }
+
     public void ReducePlayerHealth(int amount)
     {
-        if (PlayerHealth >= 0)
-            PlayerHealth -= amount;
-        else if (PlayerHealth <= 0)
+        playerHealth -= amount;
+        if (playerHealth <= 0)
         {
+            gameOverPanel.SetActive(true);
             Time.timeScale = 0;
-            GameOverCanvas.SetActive(true);
+            Debug.Log("Game Over");
         }
-
-
     }
-    public void ReduceEnemyHealth(int amount)
+
+    public void PauseGame()
     {
-        if (PlayerHealth >= 0)
-            PlayerHealth -= amount;
-        else if (PlayerHealth <= 0)
-        {
-            Time.timeScale = 0;
-            GameOverCanvas.SetActive(true);
-        }
-
-
+        Time.timeScale = 0;
+        pauseMenuPanel.SetActive(true);
     }
+    public void ResumeGame()
+    {
+        Time.timeScale = 1;
+        pauseMenuPanel.SetActive(false);
+    }
+    public void MainMenu()
+    {
+        Time.timeScale = 1;
+    }
+    public void ExitGame()
+    {
+        GameManager.Instance.ExitGame();
+    }
+
     public void RestartGame()
     {
         Time.timeScale = 1;
-        PlayerHealth = 100;
+        playerHealth = 100;
         points = 0;
-        GameOverCanvas.SetActive(false);
+        gameOverPanel.SetActive(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
