@@ -9,6 +9,8 @@ public class LevelManager : MonoBehaviour
 {
     public GameObject gameOverPanel;
     public GameObject pauseMenuPanel;
+    public GameObject PlayerModel1;
+    public GameObject PlayerModel2;
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI hpText;
     int playerHealth = 100;
@@ -17,6 +19,23 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         points = 0;
+
+        PlayerModel1.SetActive(false);
+        PlayerModel2.SetActive(false);
+
+        if(GameManager.Instance != null)
+        {
+            if(GameManager.Instance.side == Side.Israel)
+            {
+                PlayerModel1.SetActive(true);
+                PlayerModel2.SetActive(false);
+            }
+            else if(GameManager.Instance.side == Side.Palestine)
+            {
+                PlayerModel1.SetActive(false);
+                PlayerModel2.SetActive(true);
+            }
+        }
     }
 
     // Update is called once per frame
